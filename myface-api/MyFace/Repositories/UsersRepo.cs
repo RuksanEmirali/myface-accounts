@@ -2,9 +2,8 @@
 using System.Linq;
 using MyFace.Models.Database;
 using MyFace.Models.Request;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
+using MyFace.Data;
 
 namespace MyFace.Repositories
 {
@@ -62,14 +61,15 @@ namespace MyFace.Repositories
 
         public User Create(CreateUserRequest newUser)
         {
+            List<string> saltHash = SaltAndHashGenerator.getSaltAndHash(newUser.Password);
             var insertResponse = _context.Users.Add(new User
             {
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
                 Email = newUser.Email,
                 Username = newUser.Username,
-                HashedPassword = getHashAndSalt(newUser.Password)[1],
-                Salt = getHashAndSalt(newUser.Password)[0],
+                Salt = saltHash[0],
+                HashedPassword = saltHash[1],
                 ProfileImageUrl = newUser.ProfileImageUrl,
                 CoverImageUrl = newUser.CoverImageUrl,
             });
@@ -78,30 +78,7 @@ namespace MyFace.Repositories
             return insertResponse.Entity;
         }
 
-        //get Hash password and salt
-        private  List<string> getHashAndSalt(string password)
-        {
-            List<string> saltHash = new List<string>();
-
-            // generate a 128-bit salt using a cryptographically strong random sequence of nonzero values
-            byte[] salt = new byte[128 / 8];
-            using (var rngCsp = new  RNGCryptoServiceProvider())
-            {
-                rngCsp.GetNonZeroBytes(salt);
-            }
-            saltHash.Add(Convert.ToBase64String(salt));
-
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 256 / 8));
-
-            saltHash.Add(hashed);
-            
-            return saltHash;
-        }
+        
 
 
         public User Update(int id, UpdateUserRequest update)
