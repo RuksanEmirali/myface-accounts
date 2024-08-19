@@ -31,6 +31,13 @@ namespace MyFace.Controllers
             return new UserResponse(user);
         }
 
+        [HttpGet("{username}")]
+        public ActionResult<UserResponse> GetByUsername([FromRoute] string username)
+        {
+            var user = _users.GetByUsername(username);
+            return new UserResponse(user);
+        }
+
         [HttpPost("create")]
         public IActionResult Create([FromBody] CreateUserRequest newUser)
         {
