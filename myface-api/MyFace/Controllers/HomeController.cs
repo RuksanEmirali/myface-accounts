@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using MyFace.Models.Response;
 
 namespace MyFace.Controllers
 {
     [ApiController]
     [Route("")]
+    //[BasicAuthorization]
     public class HomeController : ControllerBase
     {
         [HttpGet("")]

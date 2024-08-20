@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyFace.Models.Database;
-using MyFace.Models.Services;
 using MyFace.Repositories;
 using System;
 using System.Net.Http.Headers;
@@ -26,12 +25,11 @@ namespace MyFace.Models.Response
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            IUsersRepo users)
-            : base(options, logger, encoder, clock)
-        {
+            IUsersRepo users) : base(options, logger, encoder, clock)
+        	{
 
-            _users = users;
-        }
+            	_users = users;
+        	}
 
 		protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
 
@@ -44,9 +42,7 @@ namespace MyFace.Models.Response
 			
 			try
             {
-
                 var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);  //{username}:{password}
-
                 var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
                 var username = credentials[0];

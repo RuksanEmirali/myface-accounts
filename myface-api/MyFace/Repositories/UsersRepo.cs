@@ -5,6 +5,9 @@ using MyFace.Models.Request;
 using System;
 using MyFace.Data;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace MyFace.Repositories
 {
@@ -13,11 +16,11 @@ namespace MyFace.Repositories
         IEnumerable<User> Search(UserSearchRequest search);
         int Count(UserSearchRequest search);
         User GetById(int id);
-        User GetByUsername(string username);
+        Task<User> GetByUsername(string username);
         User Create(CreateUserRequest newUser);
         User Update(int id, UpdateUserRequest update);
         void Delete(int id);
-        public async Task<User> Authenticate(string username, string password);
+        Task<User> Authenticate(string username, string password);
     }
     
     public class UsersRepo : IUsersRepo
@@ -63,10 +66,10 @@ namespace MyFace.Repositories
         }
 
         
-        public User GetByUsername(string username)
+        public async Task<User> GetByUsername(string username)
         {
-            return _context.Users
-                .Single(user => user.Username == username);
+            User user = await _context.Users.FirstOrDefaultAsync(user => user.Username == username);
+            return user;
         }
 
         public User Create(CreateUserRequest newUser)
@@ -117,25 +120,29 @@ namespace MyFace.Repositories
 
         public async Task<User> Authenticate(string username, string password)
         {
-            User user = GetByUsername(username);
+            User user = await GetByUsername(username);
             
             // get the salt from user
-            // convert password into hash password (use salt to do it)
-
-            //  _hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-            // password: password,
-            // salt: salt,
-            // prf: KeyDerivationPrf.HMACSHA256,
-            // iterationCount: 100000,
-            // numBytesRequested: 256 / 8));
-
-            //if this hash password match with user.HashedPassword 
-            // then Authenticate ok and return user
-            // otherwise return null
+            string salt = user.Salt;
             
-          
+            // convert password into hash password (use salt to do it)
+            string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: Convert.FromBase64String(salt),
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
 
-            return user;
+            //if this hash password match with user.HashedPassword +
+            if (hash == user.HashedPassword)
+            {
+                return user;
+            }
+            else 
+            {
+                return null;
+            }
+            
         }
     }
 }

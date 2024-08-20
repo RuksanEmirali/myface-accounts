@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MyFace.Models.Response;
 using MyFace.Repositories;
 
 namespace MyFace
@@ -45,10 +46,8 @@ namespace MyFace
             services.AddTransient<IPostsRepo, PostsRepo>();
             services.AddTransient<IUsersRepo, UsersRepo>();
 
-            //services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-
-            // services.AddScoped<IUserService, UserService>();
-            
+            services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(BasicAuthenticationDefaults.AuthenticationScheme, null);
+            services.AddScoped<IUsersRepo, UsersRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +65,13 @@ namespace MyFace
 
             app.UseHttpsRedirection();
 
+           
+
             app.UseRouting();
+
+             // this adds middleware from ASP.NET Core
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseCors(CORS_POLICY_NAME);
 
