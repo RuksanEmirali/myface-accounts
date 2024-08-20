@@ -47,7 +47,7 @@ namespace MyFace
             services.AddTransient<IUsersRepo, UsersRepo>();
 
             services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>(BasicAuthenticationDefaults.AuthenticationScheme, null);
-            services.AddScoped<IUsersRepo, UsersRepo>();
+            // services.AddScoped<IUsersRepo, UsersRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

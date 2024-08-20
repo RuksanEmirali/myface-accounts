@@ -124,7 +124,10 @@ namespace MyFace.Repositories
             
             // get the salt from user
             string salt = user.Salt;
-            
+
+            //byte[] SaltByte = Convert.FromBase64String(salt);
+            //string SaltString = Convert.ToBase64String(SaltByte);
+
             // convert password into hash password (use salt to do it)
             string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,

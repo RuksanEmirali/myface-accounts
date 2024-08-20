@@ -7,7 +7,7 @@ namespace MyFace.Controllers
 {
     [ApiController]
     [Route("/users")]
-    //[BasicAuthorization]
+    [BasicAuthorization]
     public class UsersController : ControllerBase
     {
         private readonly IUsersRepo _users;
