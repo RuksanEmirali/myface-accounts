@@ -7,7 +7,7 @@ namespace MyFace.Controllers
 {
     [ApiController]
     [Route("/interactions")]
-    //[BasicAuthorization]
+    [BasicAuthorization]
     public class InteractionsController : ControllerBase
     {
         private readonly IInteractionsRepo _interactions;

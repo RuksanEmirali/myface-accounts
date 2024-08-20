@@ -7,7 +7,7 @@ namespace MyFace.Controllers
 {
     [ApiController]
     [Route("/posts")]
-    //[BasicAuthorization]
+    [BasicAuthorization]
     public class PostsController : ControllerBase
     {    
         private readonly IPostsRepo _posts;
