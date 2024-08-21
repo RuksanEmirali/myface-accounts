@@ -73,10 +73,13 @@ export function Login(): JSX.Element {
         if (response === 200){
             loginContext.logIn();
             console.log("Logging IN")
+            loginContext.addHeader(`Authorization: Basic ${btoa(username + ":" + password)}`)
+            //loginContext.header = `Authorization: Basic ${btoa(username + ":" + password)}`;
         } else {
             //console.log(response);
             loginContext.logOut();
             console.log("Logging OUT")
+            //loginContext.header = "";
         }
     }
 
