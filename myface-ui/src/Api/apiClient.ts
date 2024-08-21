@@ -51,7 +51,10 @@ export async function fetchUser(userId: string | number): Promise<User> {
 }
 
 export async function fetchPosts(page: number, pageSize: number): Promise<ListResponse<Post>> {
-    const response = await fetch(`https://localhost:5001/feed?page=${page}&pageSize=${pageSize}`);
+    const response = await fetch(`https://localhost:5001/feed?page=${page}&pageSize=${pageSize}`,
+        {headers: {'Authorization': 'Basic ' + btoa("kplacido0" + ":" + "password123")}}
+    );
+    
     return await response.json();
 }
 
