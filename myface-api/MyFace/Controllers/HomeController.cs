@@ -6,7 +6,7 @@ namespace MyFace.Controllers
 {
     [ApiController]
     [Route("")]
-    [BasicAuthorization]
+    // [BasicAuthorization]
     public class HomeController : ControllerBase
     {
         [HttpGet("")]
