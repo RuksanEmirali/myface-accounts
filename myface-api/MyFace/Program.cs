@@ -28,7 +28,7 @@ namespace MyFace
             if (!context.Users.Any())
             {
                 var users = SampleUsers.GetUsers();
-                context.Users.AddRange(users);
+                context.Users.AddRange(users); 
                 context.SaveChanges();
 
                 var posts = SamplePosts.GetPosts();

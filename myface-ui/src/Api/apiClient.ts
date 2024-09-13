@@ -1,7 +1,7 @@
 ﻿import { useContext } from "react";
 import { LoginContext } from "../Components/LoginManager/LoginManager";
 
-const loginContext = useContext(LoginContext);
+const loginContext = useContext(LoginContext);  //cannot get login context here because it is a ts file, pass the header as a prop instead
 
 export interface ListResponse<T> {
     items: T[];
